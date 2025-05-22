@@ -1,4 +1,5 @@
 import { avionStage } from "../avionStage.js";
+import { BaseBleu } from "../baseBleu.js";
 import { BisonStage } from "../bisonStage.js";
 import { BLANKA } from "../blanka.js";
 import { chunli } from "../chunli.js";
@@ -8,7 +9,9 @@ import { STAGE_MID_POINT, STAGE_PADDING, STAGEFLOOR } from "../constants/stage.j
 import { HeavyHitSplash } from "../decals/heavyHitSplash.js";
 import { LightHitSplash } from "../decals/lightHitSplash.js";
 import { MediumHitSplash } from "../decals/mediumHitSplash.js";
+import { Fighter } from "../fighter.js";
 import { FpsCounter } from "../fpsConter.js";
+import { Geto } from "../geto.js";
 import { Gojo } from "../gojo.js";
 import { Guile } from "../guile.js";
 import { HONDA } from "../honda.js";
@@ -20,10 +23,13 @@ import { Ryu } from "../ryu.js";
 import { Shadow } from "../shadow.js";
 import { Stage } from "../stage.js";
 import { gameState } from "../state/gameState.js";
+import { TrueloveBg } from "../trueLoveback.js";
 import { camera } from "../utils/camera.js";
 import { pollControl } from "../utils/controlHistory.js";
 import { entitieslist } from "../utils/entityList.js";
 import { Yuta } from "../yuta.js";
+import { Control } from '../constants/control.js';
+import * as control from '../inputHandler.js';
 
 export class BatteScene {
     fighters = [];
@@ -31,15 +37,79 @@ export class BatteScene {
     shadow = [];
 
     hurtTimer = undefined;
-    constructor() {
-        this.stage = new BisonStage();
+    constructor(char1,char2) {
+        this.stage = new HondaStage();
         this.entities = new entitieslist();
         this.entitieslist = this.entities;
         this.gameover = false
+        this.gomenu = false
+        this.f1;
+        this.f2;
+        switch(char1){
+            case "ken":
+                this.f1 = new Ken(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "ryu":
+                    this.f1 = new Ryu(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break; 
+
+                case "honda":
+                    this.f1 = new HONDA(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "guil":
+                    this.f1 = new Guile(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "blanka":
+                    this.f1 = new BLANKA(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "chun":
+                    this.f1 = new chunli(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "gojo":
+                    this.f1 = new Gojo(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "geto":
+                    this.f1 = new Geto(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "yuta":
+                    this.f1 = new Yuta(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities);
+                break;
+                
+        }
+        switch(char2){
+            case "ken":
+                this.f2 = new Ken(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "ryu":
+                    this.f2 = new Ryu(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break; 
+                case "guil":
+                    this.f2 = new Guile(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "honda":
+                    this.f2 = new HONDA(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "blanka":
+                    this.f2 = new BLANKA(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "chun":
+                    this.f2 = new chunli(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "gojo":
+                    this.f2 = new Gojo(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "geto":
+                    this.f2 = new Geto(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                case "yuta":
+                    this.f2 = new Yuta(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities);
+                break;
+                
+        }
         this.fighters = [
 
-            new Yuta(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0, this.handleAttackHit.bind(this), this.entities),
-            new Guile(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1, this.handleAttackHit.bind(this), this.entities),
+            this.f1,
+           this.f2,
         ]
         this.overlays = [
             new StatusBar(this.fighters),
@@ -83,11 +153,21 @@ export class BatteScene {
         for (const fighter of this.fighters) {
             pollControl(time, fighter.playerId, fighter.direction);
             if (time.previous < this.fighters) return;
-            fighter.update(time, context, this.camera)
-            if(fighter.exetension){
-                this.stage = new Infini();
+
+            if (fighter.exetension) {
+                if (fighter.name == "GOJO") {
+                    this.stage = new Infini();
+                } else {
+                    this.stage = new TrueloveBg();
+
+                }
+
                 fighter.exetension = false
             }
+            fighter.update(time, context, this.camera)
+        }
+        if(this.stage.finis){
+            this.stage = new HondaStage();
         }
     }
     updateShadows(time, context) {
@@ -109,7 +189,12 @@ export class BatteScene {
     }
     update(time, context) {
 
-
+        if (control.ispret(0, Control.PRET)) {
+           this.gomenu = true;
+        }
+        if (control.ispret(1, Control.PRET)) {
+            this.gomenu = true;
+         }
 
         this.updateFighters(time, context);
         this.updateShadows(time, context)
@@ -121,13 +206,34 @@ export class BatteScene {
         this.entitieslist.ENT = this.entities;
     }
     drawFighters(context) {
+        let jsp = true
         for (const fighter of this.fighters) {
-            fighter.draw(context, this.camera)
+
+
+           
+                if (fighter.cutscene) {
+
+                } else {
+                    fighter.draw(context, this.camera)
+                }
+
+            
+
+
         }
+
     }
+
     drawShadows(context) {
+        let i = 0;
         for (const shadow of this.shadows) {
-            shadow.draw(context, this.camera)
+            if(this.fighters[i].cutscene){
+
+            }else{
+                shadow.draw(context, this.camera)
+            }
+            i++;
+         
         }
     }
     drawEntities(context) {
@@ -141,11 +247,12 @@ export class BatteScene {
         }
     }
     draw(context) {
-     
+
         this.stage.drawBackground(context, this.camera);
         this.drawShadows(context)
-        this.drawFighters(context);
         this.entities.drawEntities(context, this.camera)
+        this.drawFighters(context);
+
         this.stage.drawForground(context, this.camera)
         this.drawOverlays(context)
     }

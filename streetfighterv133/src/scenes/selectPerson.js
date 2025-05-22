@@ -5,21 +5,25 @@ export class SelectScene {
     constructor() {
         this.image = document.querySelector('img[alt="select"]');
         this.image2 = document.querySelector('img[alt="vs"]');
+        this.image3 = document.querySelector('img[alt="tete"]');
         this.posi1 = { x: 0, y: 0 };
         this.posi2 = { x: 0, y: 0 };
         this.grid = [
-            ['ryu', 'honda', 'blanka', 'guil'],
-            ['ken', 'chun', 'zan', 'dha'],
+            ["gojo",'ryu', 'honda', 'blanka', 'guil',"yuta"],
+            ["geto",'ken', 'chun', 'zan', 'dha'],
         ];
         this.perso = new Map([
+            ['gojo', [96, 140]],
             ['ryu', [127, 140]],
             ['honda', [160, 140]],
             ['blanka', [191, 140]],
             ['guil', [223, 140]],
+            ['geto', [96, 171]],
             ['ken', [127, 171]],
             ['chun', [160, 171]],
             ['zan', [191, 171]],
             ['dha', [223, 171]],
+            ['yuta', [255, 140]],
         ]);
         this.frames = new Map([
             ['map', [30, 429, 384, 224]],
@@ -33,6 +37,12 @@ export class SelectScene {
             ['chun', [121, 277, 97, 117]],
             ['zan', [225, 277, 97, 117]],
             ['dha', [330, 277, 97, 117]],
+            ['dha', [330, 277, 97, 117]],
+            ['gojogeto', [0, 0, 31, 64]],
+            ['yutayuji', [39, 0, 32, 64]],
+            ['geto', [405, 352, 94, 102]],
+            ['gojo', [309, 351, 94, 102]],
+            ['yuta', [112, 355, 90, 99]],
 
             ['usa', [149, 63, 31, 24]],
             ['japan', [109, 63, 31, 24]],
@@ -86,67 +96,132 @@ export class SelectScene {
 
     drawFrame(context, frameKey, x, y, direction = 1) {
         const [sourceX, sourceY, sourceWidth, sourceHeight] = this.frames.get(frameKey);
-    
+
         // Sauvegarder le contexte avant de transformer
         context.save();
-    
+
         // Appliquer la mise à l'échelle pour inversion
         context.scale(direction, 1);
-    
+
         // Calculer la position ajustée pour inversion (si direction = -1)
         const adjustedX = direction === -1 ? -(x + sourceWidth) : x;
-    
+
         // Dessiner l'image
         context.drawImage(
             this.image,
             sourceX, sourceY, sourceWidth, sourceHeight,
             adjustedX, y, sourceWidth, sourceHeight
         );
-    
+
         // Restaurer le contexte pour éviter d'affecter les autres dessins
         context.restore();
     }
-    drawFrame2(context, frameKey, x, y, direction = 1) {
+    drawCharacterSup(context) {
+        this.drawFrame3(context, `gojogeto`, 97, 144, 1);
+        this.drawFrame3(context, `yutayuji`, 255, 144, 1);
+        
+    }
+    drawFrame3(context, frameKey, x, y, direction = 1) {
         const [sourceX, sourceY, sourceWidth, sourceHeight] = this.frames.get(frameKey);
-    
+
         // Sauvegarder le contexte avant de transformer
         context.save();
-    
+
         // Appliquer la mise à l'échelle pour inversion
         context.scale(direction, 1);
-    
+
         // Calculer la position ajustée pour inversion (si direction = -1)
         const adjustedX = direction === -1 ? -(x + sourceWidth) : x;
-    
+
+        // Dessiner l'image
+        context.drawImage(
+            this.image3,
+            sourceX, sourceY, sourceWidth, sourceHeight,
+            adjustedX, y, sourceWidth , sourceHeight );
+
+       
+        context.restore();
+    }
+    drawFrame4(context, frameKey, x, y, direction = 1) {
+        const [sourceX, sourceY, sourceWidth, sourceHeight] = this.frames.get(frameKey);
+
+        // Sauvegarder le contexte avant de transformer
+        context.save();
+
+        // Appliquer la mise à l'échelle pour inversion
+        context.scale(direction, 1);
+
+        // Calculer la position ajustée pour inversion (si direction = -1)
+        const adjustedX = direction === -1 ? -(x + sourceWidth) : x;
+
+        // Dessiner l'image
+        context.drawImage(
+            this.image3,
+            sourceX, sourceY, sourceWidth, sourceHeight,
+            adjustedX, y, sourceWidth * 1.35, sourceHeight * 1.2);
+
+       
+        context.restore();
+    }
+
+    drawFrame2(context, frameKey, x, y, direction = 1) {
+        const [sourceX, sourceY, sourceWidth, sourceHeight] = this.frames.get(frameKey);
+
+        // Sauvegarder le contexte avant de transformer
+        context.save();
+
+        // Appliquer la mise à l'échelle pour inversion
+        context.scale(direction, 1);
+
+        // Calculer la position ajustée pour inversion (si direction = -1)
+        const adjustedX = direction === -1 ? -(x + sourceWidth) : x;
+
         // Dessiner l'image
         context.drawImage(
             this.image2,
             sourceX, sourceY, sourceWidth, sourceHeight,
             adjustedX, y, sourceWidth, sourceHeight
         );
-    
+
         // Restaurer le contexte pour éviter d'affecter les autres dessins
         context.restore();
     }
-    
+
     drawVs(context) {
         // Dessiner le fond "vs-back"
         this.drawFrame2(context, 'vs-back', 0, 0);
-    
+
         // Dessiner le premier personnage (direction normale)
-        this.drawFrame2(context, `vs-${this.selectedCharacter1}`, 16, 17, 1);
-    
+        if(this.selectedCharacter1 != "geto" && this.selectedCharacter1 != "gojo" && this.selectedCharacter1 != "yuta"){
+            this.drawFrame2(context, `vs-${this.selectedCharacter1}`, 16, 17, 1);
+        }else{
+            this.drawFrame4(context, this.selectedCharacter1, 16, 22, 1);
+        }
+        if(this.selectedCharacter2 != "geto" && this.selectedCharacter2 != "gojo" && this.selectedCharacter2 != "yuta"){
+            this.drawFrame2(context, `vs-${this.selectedCharacter2}`, 240, 17, -1);
+        }else{
+            this.drawFrame4(context, this.selectedCharacter2, 273, 22, -1);
+        }
+
         // Dessiner le deuxième personnage (inversé horizontalement)
-        this.drawFrame2(context, `vs-${this.selectedCharacter2}`, 240, 17, -1);
+        
+        if(this.selectedCharacter1 != "geto" && this.selectedCharacter1 != "gojo" && this.selectedCharacter1 != "yuta"){
+            this.drawFrame2(context, `vs-nom-${this.selectedCharacter1}`, 16, 150, 1);
+        }else{
+            
+        }
+        
+        if(this.selectedCharacter2 != "geto" && this.selectedCharacter2 != "gojo" && this.selectedCharacter2 != "yuta"){
+            this.drawFrame2(context, `vs-nom-${this.selectedCharacter2}`, 240, 150, 1);
+        }else{
+           
+        }
+        // Dessiner le deuxième personnage (inversé horizontalement)
        
-        this.drawFrame2(context, `vs-nom-${this.selectedCharacter1}`, 16, 150, 1);
-    
-        // Dessiner le deuxième personnage (inversé horizontalement)
-        this.drawFrame2(context, `vs-nom-${this.selectedCharacter2}`, 240, 150,1);
         this.vs = true;
     }
-    
-    
+
+
 
     drawCharacter1(context) {
         if (!this.selectedCharacter1) return;
@@ -162,7 +237,12 @@ export class SelectScene {
         if (this.j2Pret) {
             this.drawFrame(context, 'select-p1', 30, 90);
         }
-        this.drawFrame(context, this.selectedCharacter1, 0, 105);
+        if(this.selectedCharacter1 != "geto" && this.selectedCharacter1 != "gojo" && this.selectedCharacter1 != "yuta"){
+            this.drawFrame(context, this.selectedCharacter1, 0, 105);
+        }else{
+            this.drawFrame3(context, this.selectedCharacter1, 0, 105 ,-1);
+        }
+       
 
     }
 
@@ -180,13 +260,18 @@ export class SelectScene {
         if (this.j1Pret) {
             this.drawFrame(context, 'select-p2', 320, 90,);
         }
-        this.drawFrame(context, this.selectedCharacter2, 287, 105);
+        if(this.selectedCharacter2 != "geto" && this.selectedCharacter2 != "gojo" && this.selectedCharacter2 != "yuta"){
+            this.drawFrame(context, this.selectedCharacter2, 287, 105);
+        }else{
+            this.drawFrame3(context, this.selectedCharacter2, 287, 105 ,-1);
+        }
+      //  this.drawFrame(context, this.selectedCharacter2, 287, 105);
     }
     drawDrapeau(context) {
         // Si la transition est en cours (déterminée par transitionStartTime), affichez les drapeaux spécifiques
         if (this.transitionStartTime) {
             const timeElapsed = Date.now() - this.transitionStartTime;
-    
+
             // Ajoutez une logique pour rendre les drapeaux légèrement différents pendant la transition
             if (timeElapsed < this.transitionDelay) {
                 switch (this.map) {
@@ -220,7 +305,7 @@ export class SelectScene {
                 return
             }
         }
-    
+
         // Affichage des drapeaux en fonction de la carte sélectionnée
         if (this.map === 0) {
             this.drawFrame(context, 'usa', 280, 30);
@@ -230,11 +315,11 @@ export class SelectScene {
             this.drawFrame(context, 'china', 140, 40);
             this.drawFrame(context, 'russie', 90, 40);
         } else {
-            
+
         }
     }
-    
-    
+
+
 
     updatechoix1() {
         const currentTime = Date.now();
@@ -306,31 +391,32 @@ export class SelectScene {
             if (!this.transitionStartTime) {
                 this.transitionStartTime = Date.now(); // Début du délai
             }
-            
+
             // Vérifiez si le délai est écoulé avant de passer à la scène VS
-           
-                if (this.map === 0) {
-                    this.map = Math.floor(Math.random() * 3) + 1;
-                }
-            
+
+            if (this.map === 0) {
+                this.map = Math.floor(Math.random() * 3) + 1;
+            }
+
         } else {
             this.transitionStartTime = null; // Réinitialisez le temps si un joueur annule
         }
-        
+
         this.updatechoix1(); // Met à jour la sélection du joueur 1
         this.updatechoix2(); // Met à jour la sélection du joueur 2
     }
-    
+
 
     drawMap(context) {
 
         this.drawFrame(context, 'map', 0, 0);
+        this.drawCharacterSup(context);
     }
 
     draw(context) {
         if (this.j1Pret && this.j2Pret && this.transitionStartTime) {
             const timeElapsed = Date.now() - this.transitionStartTime;
-    
+
             if (timeElapsed >= this.transitionDelay) {
                 // Afficher l'écran VS
                 this.drawVs(context);
@@ -338,9 +424,11 @@ export class SelectScene {
             } else {
                 // Effet transitoire avant la scène "VS"
                 this.drawMap(context);
+
                 this.drawCharacter1(context);
                 this.drawCharacter2(context);
                 this.drawDrapeau(context);
+                this.drawCharacterSup(context);
             }
         } else {
             // État par défaut (aucune transition en cours)
@@ -348,8 +436,9 @@ export class SelectScene {
             this.drawCharacter1(context);
             this.drawCharacter2(context);
             this.drawDrapeau(context);
+
         }
     }
-    
-    
+
+
 }

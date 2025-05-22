@@ -84,6 +84,7 @@ export class GojoRed extends Fireball {
         if(hascollided != FireballCollidedState.OPPONENT)return;
 
         this.fighter.opponent.handleAttackHit(FighterAttackStrenght.HEAVY, FighterHurtBox.HEAD)
+        this.entitylist.removeEntities(this);
     }
 
     updateAnimation(time) {

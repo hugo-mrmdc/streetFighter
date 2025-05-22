@@ -105,6 +105,7 @@ export class StatusBar {
             ['game-over', [364, 71, 120, 16]],
             ['continue', [384, 40, 97, 16]],
             ['tag-yuta', [16, 56, 30, 9]],
+            ['tag-geto', [16, 56, 30, 9]],
             []
         ])
     }

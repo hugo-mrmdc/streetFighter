@@ -408,40 +408,7 @@ export class Guile extends Fighter {
             },
             jump: -420,
         }
-        this.specialMove = [{
-            state: FighterState.SPECIAL_1,
-            sequence: [
-                SpecialMoveDirection.DOWN,
-                SpecialMoveDirection.FORWARD,
-                SpecialMoveButton.ANY_PUNCH],
-            cursor: 0,
-        }, {
-            state: FighterState.CROUCH_PUNCH,
-            sequence: [
-                SpecialMoveDirection.DOWN,
-                SpecialMoveButton.ANY_PUNCH],
-            cursor: 0.
-
-
-        }
-            , {
-            state: FighterState.TORNADE,
-            sequence: [
-                SpecialMoveDirection.BACKWARD, SpecialMoveDirection.FORWARD, SpecialMoveDirection.UP,
-                SpecialMoveButton.ANY_KICK],
-            cursor: 0,
-            couuldown: 60,
-
-
-
-        }, {
-            state: FighterState.Tacle,
-            sequence: [
-                SpecialMoveDirection.DOWN,
-                SpecialMoveButton.ANY_KICK],
-            cursor: 0,
-
-        }
+        this.specialMove = [
 
         ]
         this.gravity = 1000;

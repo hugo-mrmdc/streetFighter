@@ -5,29 +5,29 @@ import { boxOverlap, getActualBoxDimensions } from "../utils/collisions.js";
 import { Fireball } from "./fireball.js";
 
 const frames = new Map([
-    ['hadoken-fireball-1-l', [[[601, 1151, 26, 21], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
-    ['hadoken-fireball-2-l', [[[629, 1152, 21, 21], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
+    ['hadoken-fireball-1-l', [[[6328, 616, 96, 46], [70, -35]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
+    ['hadoken-fireball-2-l', [[[6984, 618, 152, 38], [70, -35]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
     ['hadoken-fireball-3-l', [[[655, 1147, 27, 27], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
-    ['hadoken-fireball-1', [[[759, 1134, 45, 56], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
-    ['hadoken-fireball-2', [[[813, 1133, 46, 52], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
-    ['hadoken-fireball-3', [[[869, 1133, 48, 50], [25, 15]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
+    ['hadoken-fireball-1', [[[7662, 620, 127, 33], [70, -35]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
+    ['hadoken-fireball-2', [[[8333, 626, 135, 25], [70, -40]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
+    ['hadoken-fireball-3', [[[9008, 626, 126, 26], [70, -48]], [-15, -13, 30, 24], [-28, -20, 56, 38]]],
 
 
-    ['hadoken-collide-1', [[[743, 1201, 51, 49], [13, 10]], [0, 0, 0, 0]]],
-    ['hadoken-collide-2', [[[798, 1195, 58, 60], [9, 13]], [0, 0, 0, 0]]],
-    ['hadoken-collide-3', [[[863, 1195, 64, 60], [21, 14]], [0, 0, 0, 0]]],
+    ['hadoken-collide-1', [[[7662, 620, 127, 33], [13, 10]], [0, 0, 0, 0]]],
+    ['hadoken-collide-2', [[[8333, 626, 135, 25], [9, 13]], [0, 0, 0, 0]]],
+    ['hadoken-collide-3', [[[9008, 626, 126, 26], [21, 14]], [0, 0, 0, 0]]],
 ])
 
 const animations = {
-    [FireballState.Lancer]: [['hadoken-fireball-1-l', 40], ['hadoken-fireball-2-l', 80], ['hadoken-fireball-3-l', 40], ['hadoken-fireball-3-l', -2]],
-    [FireballState.ACTIVE]: [['hadoken-fireball-1', 32], ['hadoken-fireball-2', 32], ['hadoken-fireball-3', 16], ['hadoken-fireball-2', 32], ['hadoken-fireball-3', 16],],
+    [FireballState.Lancer]: [['hadoken-fireball-1-l', 100],['hadoken-fireball-1-l', 100], ['hadoken-fireball-2-l', 100], ['hadoken-fireball-2-l', -2]],
+    [FireballState.ACTIVE]: [['hadoken-fireball-1', 100], ['hadoken-fireball-2', 100], ['hadoken-fireball-3', 100], ['hadoken-fireball-2', 100], ['hadoken-fireball-3', 100],],
     [FireballState.COLLIDED]: [['hadoken-collide-1', 144], ['hadoken-collide-2', 80], ['hadoken-collide-3', 144]],
 
 }
 
-export class GojoBlue extends Fireball {
+export class milePatte extends Fireball {
     touche = true
-    image = document.querySelector('img[alt="gojoC"]')
+    image = document.querySelector('img[alt="geto"]')
     animationTimer = 0;
     state = FireballState.Lancer;
     constructor(args, entitylist) {
@@ -67,7 +67,7 @@ export class GojoBlue extends Fireball {
         if(this.state == FireballState.COLLIDED){
 
         }else{
-            this.velocity = 100;
+            this.velocity = 200;
         }
         if (this.state == FireballState.Lancer) {
 

@@ -20,7 +20,7 @@ const animations = {
 
 }
 
-export class Fireball {
+export class obj {
     image = document.querySelector('img[alt="ken"]')
     animationTimer = 0;
     state = FireballState.ACTIVE;
@@ -93,7 +93,6 @@ export class Fireball {
         if(hascollided != FireballCollidedState.OPPONENT)return;
 
         this.fighter.opponent.handleAttackHit(FighterAttackStrenght.HEAVY, FighterHurtBox.HEAD)
-        this.entitylist.removeEntities(this);
     }
 
     updateAnimation(time) {

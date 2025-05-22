@@ -14,12 +14,13 @@ import { chunli } from "./chunli.js";
 
 export class StreetFighterGame {
     constructor() {
+        this.char1 = "";
+        this.char2 = "";
         this.Stage = new Stage();
         this.bt = new SelectScene();
         this.context = this.getContext();
         this.isTransitioning = false; // Indicateur pour la transition
-        this.transitionStartTime = null; // Temps de début de la transition
-
+        this.transitionStartTime = null; // Temps de début de la transitio
         this.fighters = [
             new chunli(STAGE_MID_POINT + STAGE_PADDING + FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.RIGHT, 1),
             new Ryu(STAGE_MID_POINT + STAGE_PADDING - FIGHTER_START_DISTANCE, STAGEFLOOR, FighterDirection.LEFT, 0),
@@ -86,23 +87,29 @@ export class StreetFighterGame {
                 // Démarrage de la transition
                 this.isTransitioning = true;
                 this.transitionStartTime = time;
+                this.char1 = this.bt.selectedCharacter1
+                this.char2 = this.bt.selectedCharacter2
             } else if (time - this.transitionStartTime >= 5000) {
                 // Transition vers BatteScene après 5 secondes
                 this.bt.j1Pret = false;
-                this.bt = new BatteScene();
+                this.bt = new BatteScene(this.char1,this.char2);
                 this.isTransitioning = false; // Réinitialiser l'état de transition
             }
         }
-
+        if (this.bt instanceof BatteScene && this.bt.gomenu ) {
+            this.bt = new SelectScene();
+            this.update();
+            this.draw();
+        }
         // Pendant la sélection ou la transition, mettre à jour et dessiner la scène actuelle
         this.bt.update(this.frameTime, this.context);
         this.bt.draw(this.context);
 
         // Si c'est BatteScene, dessiner les entités et mettre à jour la caméra
-        /*if (this.bt instanceof BatteScene && this.bt.j1Pret && this.bt.j2Pret && this.map !== 0) {
+        if (this.bt instanceof BatteScene && this.bt.j1Pret && this.bt.j2Pret && this.map !== 0) {
             this.update();
             this.draw();
-        }*/
+        }
     }
 
     handleFormSubmit(event) {

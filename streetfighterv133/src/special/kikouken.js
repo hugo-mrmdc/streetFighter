@@ -24,11 +24,12 @@ const animations = {
 }
 
 export class kikouken extends Fireball {
+    touche = true
     image = document.querySelector('img[alt="chunli"]')
     animationTimer = 0;
     state = FireballState.ACTIVE;
-    constructor(args,entitylist) {
-       super(args,entitylist)
+    constructor(args, entitylist) {
+        super(args, entitylist)
     }
     hasCollideWithOpponent(hitbox) {
         const [x, y, width, height] = frames.get(animations[this.state][this.animationFrame][0])[1];
@@ -45,17 +46,17 @@ export class kikouken extends Fireball {
             if (boxOverlap(hitbox, actualOpponentHurBox)) return FireballCollidedState.OPPONENT;
         }
     }
-    hasCollideWithOtherFireball(hitbox){
-      
-        const ostherFireball = this.entitylist.entities.filter((fireball) => fireball instanceof Fireball && fireball != this); 
-        if(ostherFireball == 0)return;
-        for(const fireball of ostherFireball){
+    hasCollideWithOtherFireball(hitbox) {
+
+        const ostherFireball = this.entitylist.entities.filter((fireball) => fireball instanceof Fireball && fireball != this);
+        if (ostherFireball == 0) return;
+        for (const fireball of ostherFireball) {
             const [x, y, width, height] = frames.get(animations[fireball.state][fireball.animationFrame][0])[1];
             const otheractualhitBox = getActualBoxDimensions(fireball.position, fireball.direction, { x, y, width, height })
-            if(boxOverlap(hitbox,otheractualhitBox)) return FireballCollidedState.FIREBALL;
+            if (boxOverlap(hitbox, otheractualhitBox)) return FireballCollidedState.FIREBALL;
         }
     }
-    hasCollided(){
+    hasCollided() {
         const [x, y, width, height] = frames.get(animations[this.state][this.animationFrame][0])[1];
         const actualhitBox = getActualBoxDimensions(this.position, this.direction, { x, y, width, height })
         return this.hasCollideWithOpponent(actualhitBox) ?? this.hasCollideWithOtherFireball(actualhitBox);
@@ -71,17 +72,20 @@ export class kikouken extends Fireball {
 
         if (isOutOfCameraView) {
             this.entitylist.removeEntities(this);
-           
+
         }
         const hascollided = this.hasCollided()
-        if(!hascollided)return;
+        if (!hascollided) return;
         this.state = FireballState.COLLIDED;
         this.velocity = 0;
         this.animationFrame = 0;
         this.animationTimer = time.previous + animations[this.state][this.animationFrame][1];
-        if(hascollided != FireballCollidedState.OPPONENT)return;
+        if (hascollided != FireballCollidedState.OPPONENT) return;
+        if (this.touche) {
 
-        this.fighter.opponent.handleAttackHit(FighterAttackStrenght.HEAVY, FighterHurtBox.HEAD)
+            this.touche = false
+            this.fighter.opponent.handleAttackHit(FighterAttackStrenght.HEAVY, FighterHurtBox.HEAD)
+        }
     }
 
     updateAnimation(time) {
@@ -91,10 +95,11 @@ export class kikouken extends Fireball {
         const animationFrames = animations[this.state];
         if (this.animationFrame >= animations[this.state].length) {
             this.animationFrame = 0;
-            if(this.state == FireballState.COLLIDED){this.entitylist.removeEntities(this)
-               
+            if (this.state == FireballState.COLLIDED) {
+                this.entitylist.removeEntities(this)
+
             };
-        
+
         }
 
         this.animationTimer = time.previous + animations[this.state][this.animationFrame][1];

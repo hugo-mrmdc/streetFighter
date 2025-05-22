@@ -98,7 +98,7 @@ export class GojoPurple extends Fireball {
             this.animationTimer = time.previous + animations[this.state][this.animationFrame][1];
             if (hascollided != FireballCollidedState.OPPONENT) return;
             if(this.touche){
-
+                this.entitylist.removeEntities(this);
             this.touche = false
             this.fighter.red = false
             this.fighter.blue = false

@@ -9,10 +9,11 @@ import { GojoRed } from "./special/gojoRed.js";
 import { kikouken } from "./special/kikouken.js";
 import { SmashPunch } from "./special/smashpunch.js";
 export class Gojo extends Fighter {
+  timerId = null;
   constructor(x, y, direction, playerId, onAttackHit, entityList) {
     super('GOJO', x, y, direction, playerId, onAttackHit);
     this.entityList = entityList
-    
+
     this.image = document.querySelector('img[alt="gojo"]');
     this.imageCurse = document.querySelector('img[alt="gojoC"]');
     this.states[FighterState.SPECIAL_1] = {
@@ -54,43 +55,43 @@ export class Gojo extends Fighter {
         init: this.handleAirRedInit.bind(this),
         update: this.handleAirRedState.bind(this),
         validFrom: [
-          FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,FighterState.JUMP_FORWARD, FighterState.JUMP_START, FighterState.JUMP_UP, FighterState.JUMP_END
+          FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_START, FighterState.JUMP_UP, FighterState.JUMP_END
         ],
 
 
 
       }
-      this.states[FighterState.Purple] = {
-        init: this.handleHadoukenInit.bind(this),
-        update: this.handlePurpleState.bind(this),
-        shadow: [1.6, 1, -8, 0],
-        validFrom: [
-          FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
-        ],
-  
-  
-  
-      }
-      this.states[FighterState.Enter] = {
-        init: this.handleEnterInit.bind(this),
-        update: this.handleEnterState.bind(this),
-        validFrom: [
-          FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
-        ],
-  
-  
-  
-      }
-      this.states[FighterState.Expansion] = {
-        init: this.handleExpensionInit.bind(this),
-        update: this.handleExpensionState.bind(this),
-        validFrom: [
-          FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
-        ],
-  
-  
-  
-      }
+    this.states[FighterState.Purple] = {
+      init: this.handleHadoukenInit.bind(this),
+      update: this.handlePurpleState.bind(this),
+      shadow: [1.6, 1, -8, 0],
+      validFrom: [
+        FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
+      ],
+
+
+
+    }
+    this.states[FighterState.Enter] = {
+      init: this.handleEnterInit.bind(this),
+      update: this.handleEnterState.bind(this),
+      validFrom: [
+        FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
+      ],
+
+
+
+    }
+    this.states[FighterState.Expansion] = {
+      init: this.handleExpensionInit.bind(this),
+      update: this.handleExpensionState.bind(this),
+      validFrom: [
+        FighterState.IDLE, FighterState.WALK_BACKWARD, FighterState.WALK_FORWARD, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP,
+      ],
+
+
+
+    }
     this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1]
     this.frame = new Map([
       ['idle-1', [[[4, 391, 29, 66], [26, 85]], PushBox.IDLE, HurtBox.IDLE]],
@@ -346,26 +347,26 @@ export class Gojo extends Fighter {
       ['purple-4', [[[182, 1555, 51, 58], [30, 75]], PushBox.IDLE, HurtBox.IDLE]],
       ['purple-5', [[[242, 1555, 52, 59], [30, 75]], PushBox.IDLE, HurtBox.IDLE]],
       ['purple-6', [[[302, 1555, 52, 57], [30, 75]], PushBox.IDLE, HurtBox.IDLE]],
-      
+
       ['extension-1', [[[3, 1450, 32, 65], [30, 85]], PushBox.IDLE, HurtBox.IDLE]],
       ['extension-2', [[[43, 1449, 38, 66], [30, 85]], PushBox.IDLE, HurtBox.IDLE]],
       ['extension-3', [[[86, 1449, 30, 65], [25, 85]], PushBox.IDLE, HurtBox.IDLE]],
       ['extension-4', [[[130, 1449, 40, 66], [30, 87]], PushBox.IDLE, HurtBox.IDLE]],
-      
+
 
       ['enter-1', [[[7, 218, 31, 66], [26, 85]], PushBox.IDLE, [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
       ]]],
-      ['enter-2', [[[41, 217, 27, 66], [26.1, 85]], PushBox.IDLE,[
+      ['enter-2', [[[41, 217, 27, 66], [26.1, 85]], PushBox.IDLE, [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
       ]]],
-      ['enter-3', [[[75,218, 32, 66], [26, 85]], PushBox.IDLE, [
+      ['enter-3', [[[75, 218, 32, 66], [26, 85]], PushBox.IDLE, [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
       ]]],
-      ['enter-4', [[[113,219, 43, 65], [45, 85]], PushBox.IDLE, [
+      ['enter-4', [[[113, 219, 43, 65], [45, 85]], PushBox.IDLE, [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
       ]]],
-      ['enter-5', [[[161,218, 29, 66], [26, 85]], PushBox.IDLE, [
+      ['enter-5', [[[161, 218, 29, 66], [26, 85]], PushBox.IDLE, [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
       ]]],
     ]);
@@ -500,9 +501,9 @@ export class Gojo extends Fighter {
       ],
       [FighterState.Expansion]: [
         ['extension-1', 300],
-       ['extension-2', 300],
+        ['extension-2', 300],
         ['extension-3', 300],
-        ['extension-4', 10000],
+        ['extension-4', 5000],
         ['extension-1', -2],
 
       ],
@@ -718,7 +719,7 @@ export class Gojo extends Fighter {
       cursor: 0,
 
     },
-     {
+    {
       state: FighterState.AirRed,
       sequence: [
         SpecialMoveDirection.UP,
@@ -728,7 +729,7 @@ export class Gojo extends Fighter {
 
 
 
-    },{
+    }, {
       state: FighterState.Purple,
       sequence: [
         SpecialMoveDirection.BACKWARD,
@@ -740,13 +741,13 @@ export class Gojo extends Fighter {
 
 
     },
-   
+
 
 
     ]
     this.gravity = 900;
     this.fireball = { fired: false, strength: Control.MEDIUM_PUNCH }
-   this.changeState(FighterState.Enter)
+    this.changeState(FighterState.Enter)
   }
   handleRedInit(_, strenght) {
     this.resetVelocities();
@@ -763,7 +764,18 @@ export class Gojo extends Fighter {
     if (this.animations[this.cunrentState][this.animationFrame][1] != -2) return;
     this.changeState(FighterState.IDLE)
   }
+  startTimer() {
+    // Si un timer est déjà en cours, le réinitialiser
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
 
+    // Démarrer un nouveau timer
+    this.timerId = setTimeout(() => {
+     this.opponent.ult = false;
+      this.timerId = null; // Réinitialiser l'ID une fois terminé
+    }, 6000); // 10 secondes
+  }
   handleHadoukenInit(_, strenght) {
 
     this.resetVelocities();
@@ -796,59 +808,61 @@ export class Gojo extends Fighter {
     if (this.animations[this.cunrentState][this.animationFrame][1] != -2) return;
     this.changeState(FighterState.IDLE)
   }
-  handleAirRedInit(){
+  handleAirRedInit() {
 
   }
-  handleAirRedState(time){
-  this.velocity.x = 300;
-  this.velocity.y = 100;
-        if (this.position.y > STAGEFLOOR) {
-          this.position.y = STAGEFLOOR;
-          this.changeState(FighterState.JUMP_LAND);
-      }
+  handleAirRedState(time) {
+    this.velocity.x = 300;
+    this.velocity.y = 100;
+    if (this.position.y > STAGEFLOOR) {
+      this.position.y = STAGEFLOOR;
+      this.changeState(FighterState.JUMP_LAND);
+    }
 
-        if (this.animationFrame < 4) return
-       
-        if (!this.animations[this.cunrentState][this.animationFrame][1] == -1) return;
-        this.changeState(FighterState.JUMP_LAND)
+    if (this.animationFrame < 4) return
+
+    if (!this.animations[this.cunrentState][this.animationFrame][1] == -1) return;
+    this.changeState(FighterState.JUMP_LAND)
   }
   handlePurpleState(time) {
-    if(this.blue && this.red){
+    if (this.blue && this.red) {
       if (!this.fireball.fired && this.animationFrame == 3) {
         this.fireball.fired = true;
         this.entityList.addEntity.call(this.entityList, GojoPurple, this, time, this.fireball.strength);
-        
+
       }
-    }else{
+    } else {
       this.changeState(FighterState.IDLE)
     }
-   
+
 
     if (this.animations[this.cunrentState][this.animationFrame][1] != -2) return;
     this.changeState(FighterState.IDLE)
   }
-  handleEnterInit(){
+  handleEnterInit() {
 
   }
-  handleEnterState(time){
+  handleEnterState(time) {
     this.direction = -this.opponent.direction;
     if (this.animationFrame < 4) return
     if (this.animations[this.cunrentState][this.animationFrame][1] != -2) return;
     this.changeState(FighterState.IDLE)
   }
-  handleExpensionInit(){
+  handleExpensionInit() {
     this.resetVelocities();
-  
+
   }
-  handleExpensionState(time){
-    if(this.animationFrame == 2){
+  handleExpensionState(time) {
+    if (this.animationFrame == 2) {
       this.exetension = true
+      this.opponent.ult = true;
+      this.startTimer()
     }
-    if(this.animationFrame == 3){
+    if (this.animationFrame == 3) {
       this.exetension = false
     }
-    
-    
+
+
     if (this.animationFrame < 4) return
     if (this.animations[this.cunrentState][this.animationFrame][1] != -2) return;
     this.changeState(FighterState.IDLE)

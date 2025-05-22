@@ -21,6 +21,7 @@ export const FighterAttackStrenght = {
     MEDIUM:'medium',
     HEAVY:'heavy',
     Purple:'purple',
+    HEAVYC:'heavyC', 
 }
 export const FighterHurtBox ={
     HEAD:'head',
@@ -57,8 +58,16 @@ export const FighterAttacksBaseData = {
         score:500,
         damage:28,
         slide:{
-            velocity: -22 * FRAME_TIME,
+            velocity: -12 * FRAME_TIME,
             friction: 800,
+        },
+    },
+    [FighterAttackStrenght.HEAVYC]:{
+        score:500,
+        damage:28,
+        slide:{
+            velocity: -3 * FRAME_TIME,
+            friction: 500,
         },
     },
     [FighterAttackStrenght.Purple]:{
@@ -139,6 +148,12 @@ export const FighterState = {
     SmachPunch:'smachPunch',
     AirRed:'airRed',
     Expansion:'expansion',
+
+    //yuta
+    Combo1:'combo1',
+
+    //geto
+    BigFleau:'bigFleau',
 }
 
 export const PushBox ={
@@ -192,7 +207,7 @@ export const hurtStateValidFrom =[
     FighterState.LIGHT_PUNCH,FighterState.MEDIUM_PUNCH,FighterState.HEAVY_PUNCH,
     FighterState.LIGHT_Kick,FighterState.MEDIUM_Kick,FighterState.HEAVY_Kick,
     FighterState.HURT_HEAD_LIGHT,FighterState.HURT_HEAD_MEDIUM,FighterState.HURT_HEAD_HEAVY,
-    FighterState.HURT_BODY_LIGHT,FighterState.HURT_BODY_MEDIUM,FighterState.HURT_BODY_HEAVY,FighterState.SPECIAL_1,FighterState.DOWN,FighterState.ko,
+    FighterState.HURT_BODY_LIGHT,FighterState.HURT_BODY_MEDIUM,FighterState.HURT_BODY_HEAVY,FighterState.SPECIAL_1,FighterState.DOWN,FighterState.ko,FighterState.CHUT1
 ];
 
 export const SpecialMoveDirection = {

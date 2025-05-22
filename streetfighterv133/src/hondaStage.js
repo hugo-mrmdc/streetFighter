@@ -4,7 +4,7 @@ import { SkewedFLoor } from "./skewedFloor.js";
 import { Background } from "./utils/backgroundAnimation.js";
 export class HondaStage {
     constructor() {
-
+        this.finis = false;
         this.image = document.querySelector('img[alt="hondastage"]');
         this.bas = document.querySelector('img[alt="bas"]');
         this.floor = new SkewedFLoor(this.image, [8, 392, 896, 56])
