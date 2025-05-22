@@ -15,7 +15,7 @@ import { chunli } from "./chunli.js";
 export class StreetFighterGame {
     constructor() {
         this.Stage = new Stage();
-        this.bt = new BatteScene();
+        this.bt = new SelectScene();
         this.context = this.getContext();
         this.isTransitioning = false; // Indicateur pour la transition
         this.transitionStartTime = null; // Temps de début de la transition
